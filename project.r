@@ -12,5 +12,19 @@ json_data <- fromJSON("data.json")
 json_data_frame <- as.data.frame(json_data)
 View(json_data_frame)
 
+range(json_data_frame$Age)
+
+library(ggplot2)
+
+
+plot1<-ggplot(json_data_frame,aes(x=json_data_frame$Likelihood.to.recommend,y=json_data_frame$Destination.City))
+#selecting visualization type as boxplot
+plot1<-plot1+geom_bar(stat="identity")
+
+#selecting the title of the visualization
+plot1<-plot1+ggtitle("Murder Plot")
+
+#Displaying the visualization
+plot1
 
 
