@@ -27,4 +27,5 @@ plot1<-plot1+ggtitle("Murder Plot")
 #Displaying the visualization
 plot1
 
-
+pie(json_data_frame$Price.Sensitivity)
+# Because the data is massive, displaying them through charts is not the right way as the charts won't show proper data.
