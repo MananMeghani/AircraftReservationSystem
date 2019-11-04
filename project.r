@@ -38,7 +38,28 @@ MurderScat <- MurderScat + ggtitle("Distribution of UrbanPop on Number of Murder
 #Displaying the visualization
 MurderScat
 
-
 model1 <- lm(formula=json_data_frame$Likelihood.to.recommend ~ json_data_frame$Age+json_data_frame$Airline.Status,data=json_data_frame)
 
 summary(model1)
+
+#huge dataset deters us from visualizing the entire data collectively
+#------what other problems which makes us prefer regression models?
+
+
+#Create a bivariate plot of the gender versus likelihood to recommend
+ggplot(json_data_frame)+
+  #Y-axis will be the population
+  aes(x=Gender, y=Likelihood.to.recommend)+                         
+  #creating a bivariate plot (scatter plot) 
+  geom_point(color="blue")+
+  #title
+  ggtitle("Dependence of likelihood to recommend on airline status")
+
+summary(json_data_frame)
+
+RegModel <- lm(formula = json_data_frame$Likelihood.to.recommend ~ json_data_frame$Gender, data = json_data_frame)
+summary(RegModel)
+
+#plot(json_data_frame$Gender, json_data_frame$Likelihood.to.recommend)
+#abline(RegModel)
+#RegModel
