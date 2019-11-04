@@ -29,3 +29,16 @@ plot1
 
 pie(json_data_frame$Price.Sensitivity)
 # Because the data is massive, displaying them through charts is not the right way as the charts won't show proper data.
+
+MurderScat <- ggplot(json_data_frame,aes(x =json_data_frame$Gender,y = json_data_frame$Likelihood.to.recommend))
+#Selecting visualization type as Scatter Chart
+MurderScat <- MurderScat + geom_point()
+#Providing a title to the visualization
+MurderScat <- MurderScat + ggtitle("Distribution of UrbanPop on Number of Murders")
+#Displaying the visualization
+MurderScat
+
+
+model1 <- lm(formula=json_data_frame$Likelihood.to.recommend ~ json_data_frame$Age+json_data_frame$Airline.Status,data=json_data_frame)
+
+summary(model1)
