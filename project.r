@@ -4,10 +4,10 @@ rm(list=ls()) # Clear all user objects from the environment!!!
 
 
 library(jsonlite)
-#getwd
-#path = 'D:/Sem-1/IST-687/Project'
-#setwd(path)
-#dir()
+getwd
+path = 'D:/Sem-1/IST-687/Project'
+setwd(path)
+dir()
 json_data <- fromJSON("data.json")
 json_data_frame <- as.data.frame(json_data)
 View(json_data_frame)
@@ -63,3 +63,38 @@ summary(RegModel)
 #plot(json_data_frame$Gender, json_data_frame$Likelihood.to.recommend)
 #abline(RegModel)
 #RegModel
+
+
+
+##########################################################
+
+json_data_frame_LowNPS<-json_data_frame[json_data_frame$Likelihood.to.recommend<7,]
+json_data_frame_HighNPS<-json_data_frame[json_data_frame$Likelihood.to.recommend>8,]
+
+install.packages("dplyr")
+library(dplyr)
+library(tidyverse)
+
+dataGroupedByAirlineName<-group_by(json_data_frame_LowNPS,Partner.Name)
+dataGroupedByAirlineName2<-group_by(json_data_frame_HighNPS,Partner.Name)
+
+dataSummarised<-summarise(dataGroupedByAirlineName ,LowNPS=n())
+dataSummarised1<-summarise(dataGroupedByAirlineName2 ,HighNPS=n())
+dataSummarised$LowNPSpercentage <- round((dataSummarised$LowNPS / nrow(json_data_frame_HighNPS))*100,2)
+dataSummarised1$HighNPSpercentage <- round((dataSummarised1$HighNPS / nrow(json_data_frame_HighNPS))*100,2)
+dataSummarised3<- merge(dataSummarised,dataSummarised1,by ="Partner.Name")
+View(dataSummarised3)
+
+dataGroupedByAirlineNameOriginalData<-group_by(json_data_frame_HighNPS, Partner.Name)
+
+dataSummarised2<-summarise(dataGroupedByAirlineNameOriginalData, Total.Entries=n())
+
+View(dataSummarised2)
+
+dataCompare<-merge(dataSummarised3,dataSummarised2,)
+
+dataCompare$LowNPSRelative<-(dataCompare$LowNPS/dataCompare$Total.Entries)*100
+dataCompare$HighNPSRelative<-(dataCompare$HighNPS/dataCompare$Total.Entries)*100
+dataCompare$RelativeLowHigh <-(dataCompare$HighNPSRelative-dataCompare$LowNPSRelative)/10
+
+View(dataCompare)
